@@ -5,4 +5,13 @@ To generate the doc
 pyunit
 ----
 
-TODO: add approvals based on generated files
+== test_demo_with_approvals.py
+
+Use approvals to check regression in documentation.
+
+The file `DocAsTestPyTest.py` encapsulate `Approvals` to automate verification at the end of each test. 
+
+
+== test_demo_generate_doc.py
+
+Generate a file using DocGenerator.py

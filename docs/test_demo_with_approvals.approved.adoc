@@ -1,0 +1,6 @@
+= Demo with approvals
+The module description.
+
+include::test_demo_with_approvals.test_with_description.approved.adoc[leveloffset=+1]
+include::test_demo_with_approvals.test_second.approved.adoc[leveloffset=+1]
+include::test_demo_with_approvals.test_third.approved.adoc[leveloffset=+1]
