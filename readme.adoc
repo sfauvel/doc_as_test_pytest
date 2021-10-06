@@ -1,0 +1,8 @@
+= Doc as test with pyunit
+
+To generate the doc
+----
+pyunit
+----
+
+TODO: add approvals based on generated files

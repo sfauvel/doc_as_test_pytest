@@ -1,0 +1,7 @@
+= A second chapter
+
+test_a_second_chapter
+
+This econd chapter is visible in the general documentation
+
+
