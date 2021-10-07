@@ -1,5 +1,0 @@
-= With description
-
-The description of this chapter.
-
-Test to check

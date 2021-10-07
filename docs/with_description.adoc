@@ -1,9 +1,0 @@
-= With description
-
-The description of this chapter.
-
-The content of the chapter.
-In python, it's easy to write a multiline text.
-So, we can write the doc directly in the test.
-
-

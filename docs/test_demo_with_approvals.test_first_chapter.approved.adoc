@@ -1,0 +1,5 @@
+= First chapter
+
+The description of the chapter can be done with docstring.
+
+You can write in your test the information you want to see in your documentation.

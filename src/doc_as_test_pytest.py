@@ -16,7 +16,7 @@ class DocAsTest():
         return title
 
     def module_content(self, request, description):
-        file_base_name = os.path.splitext(request.node.name)[0]
+        file_base_name = os.path.splitext(os.path.basename(request.node.name))[0]
         title = self.format_to_title(file_base_name)
 
         includes = "\n".join("include::{}[leveloffset=+1]".format(test) for test in self.tests)
@@ -25,10 +25,7 @@ class DocAsTest():
 
     def test_content(self, request, description):
 
-        title = request.node.name
-        title = title[len("test_"):]
-        title = title.replace("_", " ")
-        title = title[0].upper() + title[1:]
+        title = self.format_to_title(request.node.name)
         title = "= " + title +"\n\n"
 
         description = description.strip() +"\n\n" if description != None else ""
@@ -84,7 +81,7 @@ class DocAsTestNamer(Namer):
         self.MethodName = request.node.name
         self.ClassName = os.path.splitext(request.fspath.basename)[0]
         self.Directory = request.fspath.dirname
-    
+        
     def get_class_name(self):
         return self.ClassName
     
@@ -92,7 +89,7 @@ class DocAsTestNamer(Namer):
         return self.MethodName
     
     def get_directory(self):
-        return self.Directory + "/" + "docs"
+        return os.path.join(self.Directory, "../docs")
 
     def config_directory(self):
         return self.Directory

@@ -1,17 +1,41 @@
-= Doc as test with pyunit
+= Doc as test with pytest
 
-To generate the doc
+This project provides tools to implements https://sfauvel.github.io/documentationtesting/[Doc as test] with Python and https://docs.pytest.org/[pytest].
+
+== Prerequisite
+
+=== With docker
+
+The script `docker/build_docker_image.sh` build the image that run tests.
+
+To run them, use the `run_pytest.sh` script giving him parameters to pass to pytest command.
+
+Example:
 ----
-pyunit
+. run_pytest.sh -v
 ----
 
-== test_demo_with_approvals.py
+=== Without docker
 
-Use approvals to check regression in documentation.
+To execute examples in this project you need to install Python and the libraries below:
 
-The file `DocAsTestPyTest.py` encapsulate `Approvals` to automate verification at the end of each test. 
+----
+include::docker/python_libs.txt[]
+----
 
+They can install them with `pip install` command.
 
-== test_demo_generate_doc.py
+Versions are just those used in our environment but it should work with others.
 
-Generate a file using DocGenerator.py
+To run the tests, use the following command: 
+----
+pytest -v
+----
+
+== Usage
+
+The file `doc_as_test_pytest.py` encapsulate `Approvals` to call `verify` at the end of each test and to generate a document containing all test documents of the same file. 
+
+There is a test example with the file `test_demo_with_approvals.py`.
+Approved documents are on the `docs` folder.
+
