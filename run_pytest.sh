@@ -7,16 +7,16 @@
 PYTHON_DOCKER_IMAGE=doc_as_test_python
 
 function run_on_docker {
-  COMMAND="$*"
+  COMMAND=$*
 
   docker run \
     -v $(pwd):/project \
     -w /project \
     -it $PYTHON_DOCKER_IMAGE \
-    ${COMMAND}
+    bash -c "${COMMAND}"
 }
 
 run_on_docker "pytest $*"
 
 chmod a+x ./docker/chown_docs.sh
-run_on_docker bash -c "/project/docker/chown_docs.sh $(whoami) /project/docs"
+run_on_docker "/project/docker/chown_docs.sh $(whoami) /project/docs"
