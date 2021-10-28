@@ -22,7 +22,9 @@ class DocAsTest():
 
         includes = "\n".join("include::{}[leveloffset=+1]".format(test) for test in self.tests)
         
-        return "= " + title + "\n" + description.strip() + "\n\n" + includes
+        description_to_add = description.strip() + "\n\n" if description is not None else ""
+
+        return "= " + title + "\n" + description_to_add + includes
 
     def test_content(self, request, description):
 
