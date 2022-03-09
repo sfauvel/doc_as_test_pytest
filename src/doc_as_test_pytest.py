@@ -5,6 +5,21 @@ from approvaltests.pytest.namer import Namer
 from approvaltests.approvals import verify
 
 
+
+@pytest.fixture(scope="function")
+def doc(request, doc_module):
+    yield doc_module
+
+    doc_module.verify_function(request)
+
+@pytest.fixture(scope="module")
+def doc_module(request):
+    doc = DocAsTest()
+
+    yield doc
+
+    doc.verify_module(request)
+
 class DocAsTest():
     def __init__(self):
         self.content = ""
