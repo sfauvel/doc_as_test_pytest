@@ -1,4 +1,5 @@
 = Doc as test with pytest
+:url-repo: https://github.com/sfauvel/doc_as_test_pytest
 
 This project provides tools to implements https://sfauvel.github.io/documentationtesting/[Doc as test] with Python and https://docs.pytest.org/[pytest].
 
@@ -17,11 +18,20 @@ Example:
 
 === Without docker
 
-To execute examples in this project you need to install Python and the libraries below:
+ifndef::env-github[]
+To execute examples in this project you need to install Python 
+and the libraries below:
 
 ----
 include::docker/python_libs.txt[]
 ----
+endif::[]
+ifdef::env-github[] 
+To execute examples in this project you need to install Python 
+and the libraries listed in 
+link:{url-repo}/blob/main/docker/python_libs.txt[python_libs.txt].
+endif::[]
+
 
 They can install them with `pip install` command.
 
