@@ -1,0 +1,6 @@
+= ClassDemo
+
+
+The class description.
+
+

@@ -3,7 +3,7 @@ This file is an example of using doc as test with pytest.
 """
 import os
 import pytest
-from doc_as_test_pytest import DocAsTest, doc, doc_module
+from doc_as_test_pytest import DocAsTest, doc, doc_class, doc_module
 
 
 
@@ -26,3 +26,15 @@ Generally, we found input and output.
 def test_third_chapter(doc):
    
     doc.write("Nothing new for this third chapter")
+
+@pytest.mark.usefixtures("doc_class")
+class TestClassDemo:
+    """
+    The class description.
+    """
+    def test_first_chapter_in_a_class(self, doc):
+        """
+        The description of the chapter within a class.
+        """
+
+        doc.write("Write the expected content here.")

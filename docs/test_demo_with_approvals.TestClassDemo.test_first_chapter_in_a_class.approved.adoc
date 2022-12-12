@@ -1,0 +1,5 @@
+= First chapter in a class
+
+The description of the chapter within a class.
+
+Write the expected content here.

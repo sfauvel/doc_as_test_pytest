@@ -1,7 +1,8 @@
 import json
 import os
 import pytest
-from approvaltests.pytest.namer import Namer
+import textwrap
+from approvaltests.pytest.py_test_namer import PyTestNamer
 from approvaltests.approvals import verify
 
 
@@ -12,18 +13,36 @@ def doc(request, doc_module):
 
     doc_module.verify_function(request)
 
+@pytest.fixture(scope="class")
+def doc_class(request, doc_module):
+  
+    doc_module.verify_class(request)
+    doc_module.increment_leveloffset()
+    yield doc_module
+    doc_module.decrement_leveloffset()
+
+
 @pytest.fixture(scope="module")
 def doc_module(request):
     doc = DocAsTest()
 
+    doc.increment_leveloffset()
     yield doc
 
     doc.verify_module(request)
+    doc.decrement_leveloffset()
 
 class DocAsTest():
     def __init__(self):
         self.content = ""
-        self.tests = []
+        self.test_includes = []
+        self.leveloffset = 0
+
+    def increment_leveloffset(self):
+        self.leveloffset += 1
+
+    def decrement_leveloffset(self):
+        self.leveloffset -= 1
 
     def format_to_title(self, name):
         title = name[len("test_"):]
@@ -35,24 +54,33 @@ class DocAsTest():
         file_base_name = os.path.splitext(os.path.basename(request.node.name))[0]
         title = self.format_to_title(file_base_name)
 
-        includes = "\n".join("include::{}[leveloffset=+1]".format(test) for test in self.tests)
+        includes = "\n".join(test for test in self.test_includes)
         
         description_to_add = description.strip() + "\n\n" if description is not None else ""
 
         return "= " + title + "\n" + description_to_add + includes
+
+    def class_content(self, request, description):
+        title = request.cls.__name__[len("Test"):]
+        title = "= " + title +"\n\n"
+
+        description_to_add = textwrap.dedent(description) +"\n\n" if description != None else ""
+
+        return title + description_to_add
 
     def test_content(self, request, description):
 
         title = self.format_to_title(request.node.name)
         title = "= " + title +"\n\n"
 
-        description = description.strip() +"\n\n" if description != None else ""
+        description_to_add = description.strip() +"\n\n" if description != None else ""
 
-        return  title + description + self.content
+        return  title + description_to_add + self.content
             
 
     def register_test(self, namer):
-        self.tests.append(namer.get_approved_filename(namer.get_file_name()))
+        test = namer.get_approved_filename(namer.get_file_name())
+        self.test_includes.append("include::{}[leveloffset=+{}]".format(test, self.leveloffset))
 
     def write(self, text):
         self.content = self.content + text
@@ -61,12 +89,8 @@ class DocAsTest():
     def verify_function(self, request):
        
         namer = DocAsTestFunctionNamer(request)
-
-        class_name = namer.get_class_name()
-        test_name = namer.get_method_name()
         
-        test_module = __import__(class_name)
-        description = getattr(test_module, test_name).__doc__
+        description = request.function.__doc__
 
         self.register_test(namer)
         content_to_verify = self.test_content(request, description)
@@ -76,36 +100,43 @@ class DocAsTest():
             namer=namer
         )
 
+
+    def verify_class(self, request):
+        namer = DocAsTestClassNamer(request)
+
+        description = textwrap.dedent(request.cls.__doc__)
+
+        self.register_test(namer)
+
+        content_to_verify = self.class_content(request, description)
+
+        self.content = ""
+        verify(
+            content_to_verify, 
+            namer=namer
+        )
+
+
     def verify_module(self, request):
         namer = DocAsTestModuleNamer(request)
 
-        class_name = namer.get_class_name()
-        test_module = __import__(class_name)
-        description = test_module.__doc__
+        description = request.module.__doc__
 
         verify(
             self.module_content(request, description), 
             namer = namer
         )
 
-class DocAsTestNamer(Namer):
+class DocAsTestNamer(PyTestNamer):
     Directory = ''
-    MethodName = ''
-    ClassName = ''
+    ModuleName = ''
     
     def __init__(self, request):
-        Namer.__init__(self, ".adoc")
+        PyTestNamer.__init__(self, request, ".adoc")
         self.config = None
-        self.MethodName = request.node.name
-        self.ClassName = os.path.splitext(request.fspath.basename)[0]
+        self.ModuleName = request.module.__name__
         self.Directory = request.fspath.dirname
-        
-    def get_class_name(self):
-        return self.ClassName
-    
-    def get_method_name(self):
-        return self.MethodName
-    
+
     def get_directory(self):
         return os.path.join(self.Directory, "../docs")
 
@@ -126,12 +157,37 @@ class DocAsTestNamer(Namer):
 
 class DocAsTestFunctionNamer(DocAsTestNamer):
     
+    MethodName = ''
+    ClassName = ''
+    def __init__(self, request):
+        super().__init__(request)
+
+        self.MethodName = request.function.__name__
+        self.ClassName = None if request.cls is None else request.cls.__name__
+
     def get_file_name(self):
-        class_name = "" if (self.ClassName is None) else (self.ClassName + ".")
-        return class_name + self.MethodName
+        class_name = "" if (self.ClassName is None) else ("." + self.ClassName)
+        return self.ModuleName + class_name + "." + self.MethodName
+    
+    def get_method_name(self):
+        return self.MethodName
+    
+    def get_class_name(self):
+        return self.ClassName
 
+class DocAsTestClassNamer(DocAsTestNamer):
+    ClassName = ''
+    def __init__(self, request):
+        super().__init__(request)
 
+        self.ClassName = request.cls.__name__
+
+    def get_file_name(self):
+        return self.ModuleName + "." + self.ClassName
+
+    def get_class_name(self):
+        return self.ClassName
 class DocAsTestModuleNamer(DocAsTestNamer):
     
     def get_file_name(self):
-        return self.ClassName
+        return self.ModuleName
