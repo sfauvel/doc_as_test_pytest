@@ -1,4 +1,4 @@
-= ClassDemo
+= Class demo
 
 
 The class description.

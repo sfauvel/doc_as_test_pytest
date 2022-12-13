@@ -1,6 +1,7 @@
 import json
 import os
 import pytest
+import re
 import textwrap
 from approvaltests.pytest.py_test_namer import PyTestNamer
 from approvaltests.approvals import verify
@@ -44,8 +45,15 @@ class DocAsTest():
     def decrement_leveloffset(self):
         self.leveloffset -= 1
 
+    @staticmethod
+    def camel_case_to_snake_case(match_obj):
+            return match_obj.group(1) + "_" + match_obj.group(2).lower()
+
+
     def format_to_title(self, name):
-        title = name[len("test_"):]
+        title = name
+        title = re.sub(r"([a-z])([A-Z])", DocAsTest.camel_case_to_snake_case, title)
+        title = title[len("test_"):]
         title = title.replace("_", " ")
         title = title[0].upper() + title[1:]
         return title
@@ -61,21 +69,19 @@ class DocAsTest():
         return "= " + title + "\n" + description_to_add + includes
 
     def class_content(self, request, description):
-        title = request.cls.__name__[len("Test"):]
-        title = "= " + title +"\n\n"
+        title = self.format_to_title(request.cls.__name__)
 
         description_to_add = textwrap.dedent(description) +"\n\n" if description != None else ""
 
-        return title + description_to_add
+        return "= " + title + "\n\n" + description_to_add
 
     def test_content(self, request, description):
 
         title = self.format_to_title(request.node.name)
-        title = "= " + title +"\n\n"
 
         description_to_add = description.strip() +"\n\n" if description != None else ""
 
-        return  title + description_to_add + self.content
+        return  "= " + title + "\n\n" + description_to_add + self.content
             
 
     def register_test(self, namer):
