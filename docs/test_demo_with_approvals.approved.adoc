@@ -4,5 +4,7 @@ This file is an example of using doc as test with pytest.
 include::test_demo_with_approvals.test_first_chapter.approved.adoc[leveloffset=+1]
 include::test_demo_with_approvals.test_second_chapter.approved.adoc[leveloffset=+1]
 include::test_demo_with_approvals.test_third_chapter.approved.adoc[leveloffset=+1]
+include::test_demo_with_approvals.test_chapter_with_parameters[Arg A].approved.adoc[leveloffset=+1]
+include::test_demo_with_approvals.test_chapter_with_parameters[Arg B].approved.adoc[leveloffset=+1]
 include::test_demo_with_approvals.TestClassDemo.approved.adoc[leveloffset=+1]
 include::test_demo_with_approvals.TestClassDemo.test_first_chapter_in_a_class.approved.adoc[leveloffset=+2]

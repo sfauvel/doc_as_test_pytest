@@ -168,7 +168,7 @@ class DocAsTestFunctionNamer(DocAsTestNamer):
     def __init__(self, request):
         super().__init__(request)
 
-        self.MethodName = request.function.__name__
+        self.MethodName = request.node.name
         self.ClassName = None if request.cls is None else request.cls.__name__
 
     def get_file_name(self):

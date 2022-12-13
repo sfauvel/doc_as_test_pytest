@@ -27,6 +27,14 @@ def test_third_chapter(doc):
    
     doc.write("Nothing new for this third chapter")
 
+@pytest.mark.parametrize("param", [
+    ("Arg A"), 
+    ("Arg B")
+])
+def test_chapter_with_parameters(doc, param):
+   
+    doc.write(f"Check it works with `{param}`")
+
 @pytest.mark.usefixtures("doc_class")
 class TestClassDemo:
     """
@@ -38,3 +46,4 @@ class TestClassDemo:
         """
 
         doc.write("Write the expected content here.")
+
