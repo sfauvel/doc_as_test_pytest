@@ -107,7 +107,7 @@ class DocAsTest():
     def verify_class(self, request):
         namer = DocAsTestClassNamer(request)
 
-        description = textwrap.dedent(request.cls.__doc__)
+        description = "" if request.cls.__doc__ is None else textwrap.dedent(request.cls.__doc__)
 
         self.register_test(namer)
 

@@ -51,19 +51,10 @@ class TestClassDemo:
         doc.write("With this second chapter, doc of the class should not be write a second time.")
 
     class TestSubClassDemo:
-        """
-        ???
-        """
         def test_chapter_on_a_subclass(self, doc):
-            """
-            ???
-            """
             doc.write("Could execute a subclass")
 
 
         def test_second_chapter_on_a_subclass(self, doc):
-            """
-            ???
-            """
             doc.write("Could execute a subclass")
 
