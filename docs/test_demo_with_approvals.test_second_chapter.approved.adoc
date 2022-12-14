@@ -1,7 +1,0 @@
-= Second chapter
-
-
-The text written in the doc should provide enough information to say if the behaviour is correct.
-
-Generally, we found input and output. 
-    

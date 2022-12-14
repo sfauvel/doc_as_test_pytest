@@ -1,0 +1,25 @@
+= Using doc string
+
+The description of the chapter can be done using Python docstring.
+
+
+This doc string is placed in the document just under the title and before the text added within the test function.
+
+.Code use to generate this chapter
+[%collapsible]
+====
+[source,python,indent=0]
+----
+
+def test_using_doc_string(request, doc):
+    """
+    The description of the chapter can be done using Python docstring.
+    """
+
+    doc.write(textwrap.dedent("""
+        This doc string is placed in the document just under the title and before the text added within the test function.
+        """))
+
+
+----
+====

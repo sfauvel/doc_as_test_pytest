@@ -1,0 +1,19 @@
+= Simple chapter
+
+
+You can write in your test the information you want to see in your documentation.
+
+.Code use to generate this chapter
+[%collapsible]
+====
+[source,python,indent=0]
+----
+
+def test_simple_chapter(request, doc):
+    doc.write(textwrap.dedent("""
+        You can write in your test the information you want to see in your documentation.
+        """))
+
+
+----
+====

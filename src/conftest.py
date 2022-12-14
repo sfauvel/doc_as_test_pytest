@@ -14,4 +14,4 @@ def pytest_runtest_makereport(item, call):
         if doc_fixture_name in item.funcargs:
             doc = item.funcargs[doc_fixture_name]
             if isinstance(doc, DocAsTest):
-                doc.write(f"Exception executing test:\n----\n{rep.longreprtext}\n----\n")
+                doc.write(f"\n********************\nException executing test:\n----\n{rep.longreprtext}\n----\n")

@@ -1,9 +1,8 @@
 = Demo with approvals
 This file is an example of using doc as test with pytest.
 
-include::test_demo_with_approvals.test_first_chapter.approved.adoc[leveloffset=+1]
-include::test_demo_with_approvals.test_second_chapter.approved.adoc[leveloffset=+1]
-include::test_demo_with_approvals.test_third_chapter.approved.adoc[leveloffset=+1]
+include::test_demo_with_approvals.test_simple_chapter.approved.adoc[leveloffset=+1]
+include::test_demo_with_approvals.test_using_doc_string.approved.adoc[leveloffset=+1]
 include::test_demo_with_approvals.test_chapter_with_parameters_Arg_A_.approved.adoc[leveloffset=+1]
 include::test_demo_with_approvals.test_chapter_with_parameters_Arg_B_.approved.adoc[leveloffset=+1]
 include::test_demo_with_approvals.TestClassDemo.approved.adoc[leveloffset=+1]

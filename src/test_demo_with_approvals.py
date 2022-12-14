@@ -1,31 +1,53 @@
 """
 This file is an example of using doc as test with pytest.
 """
+import inspect
 import os
 import pytest
+import textwrap
 from doc_as_test_pytest import DocAsTest, doc, doc_module
 
+class CodeExtractor:
+    def extract_code(object, tag:str):
+        return inspect.getsource(object)\
+            .split(f"# >>>{tag}")[1]\
+            .split(f"# <<<{tag}")[0]
+            
+def format_code(request, tag):
+    code = CodeExtractor.extract_code(request.module, tag)
+    return (textwrap.dedent("""\
 
+        .Code use to generate this chapter
+        [%collapsible]
+        ====
+        [source,python,indent=0]
+        ----
+        {}
+        ----
+        ====
+        """).format(code))
 
-def test_first_chapter(doc):
+# >>>simple_chapter
+def test_simple_chapter(request, doc):
+    doc.write(textwrap.dedent("""
+        You can write in your test the information you want to see in your documentation.
+        """))
+
+# <<<simple_chapter
+    doc.write(format_code(request, "simple_chapter"))
+
+# >>>using_doc_string
+def test_using_doc_string(request, doc):
     """
-    The description of the chapter can be done with docstring.
+    The description of the chapter can be done using Python docstring.
     """
 
-    doc.write("You can write in your test the information you want to see in your documentation.")
+    doc.write(textwrap.dedent("""
+        This doc string is placed in the document just under the title and before the text added within the test function.
+        """))
 
-
-def test_second_chapter(doc):
-    doc.write("""
-The text written in the doc should provide enough information to say if the behaviour is correct.
-
-Generally, we found input and output. 
-    """)
-
-
-def test_third_chapter(doc):
-   
-    doc.write("Nothing new for this third chapter")
+# <<<using_doc_string
+    doc.write(format_code(request, "using_doc_string"))
 
 @pytest.mark.parametrize("param", [
     ("Arg A"), 
