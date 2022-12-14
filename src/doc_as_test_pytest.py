@@ -10,6 +10,8 @@ from approvaltests.approvals import verify
 
 @pytest.fixture(scope="function")
 def doc(request, doc_module):
+
+    
     if request.cls is not None and request.cls not in doc_module.test_classes:
         doc_module.test_classes.append(request.cls)
         # TODO The method test is not launch if the class test fails. It's a problem.
@@ -166,7 +168,7 @@ class DocAsTestFunctionNamer(DocAsTestNamer):
         super().__init__(request)
 
         self.MethodName = request.node.name
-        self.ClassName = None if request.cls is None else request.cls.__name__
+        self.ClassName = None if request.cls is None else request.cls.__qualname__
 
     def get_file_name(self):
         class_name = "" if (self.ClassName is None) else ("." + self.ClassName)
@@ -187,7 +189,7 @@ class DocAsTestClassNamer(DocAsTestNamer):
     def __init__(self, request):
         super().__init__(request)
 
-        self.ClassName = request.cls.__name__
+        self.ClassName = request.cls.__qualname__
 
     def get_file_name(self):
         return self.ModuleName + "." + self.ClassName
