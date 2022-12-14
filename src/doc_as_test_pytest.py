@@ -10,34 +10,27 @@ from approvaltests.approvals import verify
 
 @pytest.fixture(scope="function")
 def doc(request, doc_module):
+    if request.cls is not None and request.cls not in doc_module.test_classes:
+        doc_module.test_classes.append(request.cls)
+        doc_module.verify_class(request)
+
     yield doc_module
 
     doc_module.verify_function(request)
-
-@pytest.fixture(scope="class")
-def doc_class(request, doc_module):
-  
-    doc_module.verify_class(request)
-    doc_module.increment_leveloffset()
-    yield doc_module
-    doc_module.decrement_leveloffset()
-
 
 @pytest.fixture(scope="module")
 def doc_module(request):
     doc = DocAsTest()
 
-    doc.increment_leveloffset()
     yield doc
 
     doc.verify_module(request)
-    doc.decrement_leveloffset()
 
 class DocAsTest():
     def __init__(self):
         self.content = ""
         self.test_includes = []
-        self.leveloffset = 0
+        self.test_classes = []
 
     def increment_leveloffset(self):
         self.leveloffset += 1
@@ -86,7 +79,10 @@ class DocAsTest():
 
     def register_test(self, namer):
         test = namer.get_approved_filename(namer.get_file_name())
-        self.test_includes.append("include::{}[leveloffset=+{}]".format(test, self.leveloffset))
+        class_name = namer.ClassName
+        class_leveloffset = len(class_name.split(".")) if class_name is not None else 0
+        method_leveloffset = 1 if isinstance(namer, DocAsTestFunctionNamer) else 0
+        self.test_includes.append("include::{}[leveloffset=+{}]".format(test, class_leveloffset+method_leveloffset))
 
     def write(self, text):
         self.content = self.content + text

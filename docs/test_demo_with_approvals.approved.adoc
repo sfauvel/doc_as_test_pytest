@@ -8,3 +8,4 @@ include::test_demo_with_approvals.test_chapter_with_parameters_Arg_A_.approved.a
 include::test_demo_with_approvals.test_chapter_with_parameters_Arg_B_.approved.adoc[leveloffset=+1]
 include::test_demo_with_approvals.TestClassDemo.approved.adoc[leveloffset=+1]
 include::test_demo_with_approvals.TestClassDemo.test_first_chapter_in_a_class.approved.adoc[leveloffset=+2]
+include::test_demo_with_approvals.TestClassDemo.test_second_chapter_in_a_class.approved.adoc[leveloffset=+2]

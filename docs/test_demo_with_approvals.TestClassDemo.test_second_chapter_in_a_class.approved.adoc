@@ -1,0 +1,3 @@
+= Second chapter in a class
+
+With this second chapter, doc of the class should not be write a second time.
