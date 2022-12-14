@@ -12,6 +12,7 @@ from approvaltests.approvals import verify
 def doc(request, doc_module):
     if request.cls is not None and request.cls not in doc_module.test_classes:
         doc_module.test_classes.append(request.cls)
+        # TODO The method test is not launch if the class test fails. It's a problem.
         doc_module.verify_class(request)
 
     yield doc_module

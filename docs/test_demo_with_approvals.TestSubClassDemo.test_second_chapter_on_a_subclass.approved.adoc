@@ -1,4 +1,4 @@
-= Chapter on a subclass
+= Second chapter on a subclass
 
 ???
 
